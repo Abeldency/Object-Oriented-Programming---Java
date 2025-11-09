@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+
+class TableThread implements Runnable { private int number;
+
+public TableThread(int number) { this.number = number;
+}
+
+
+public void run() { try {
+for (int i = 1; i <= 10; i++) {
+System.out.println("Table: " + number + " x " + i + " = " + (number * i)); Thread.sleep(2000);
+}
+} catch (InterruptedException e) { System.out.println("Table thread interrupted.");
+}
+}
+}
+
+
+class DivisorThread implements Runnable {
+
+private int number;
+
+
+public DivisorThread(int number) { this.number = number;
+}
+
+
+public void run() { try {
+for (int i = 1; i <= number; i++) { if (number % i == 0) {
+System.out.println("Divisor: " + i); Thread.sleep(2000);
+}
+}
+} catch (InterruptedException e) { System.out.println("Divisor thread interrupted.");
+}
+}
+}
+
+
+public class Exp_8_3 {
+public static void main(String[] args) { Scanner scanner = new Scanner(System.in);
+System.out.println("Enter a single number:");
+
+int number = scanner.nextInt();
+
+
+Runnable tableTask = new TableThread(number); Runnable divisorTask = new DivisorThread(number);
+
+Thread t1 = new Thread(tableTask); Thread t2 = new Thread(divisorTask);
+
+t1.start();
+t2.start(); scanner.close();
+}
+}
