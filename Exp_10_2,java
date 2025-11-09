@@ -1,0 +1,88 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Exp_10_2 extends JFrame implements ActionListener {
+    // Declare components
+    private JTextField num1Field, num2Field;
+    private JButton addBtn, subBtn, mulBtn, divBtn;
+
+    public Exp_10_2() {
+        // Frame title
+        setTitle("Swing Application - Calculator");
+        setLayout(new GridLayout(3, 2, 10, 10)); // simpler layout
+        JLabel label1 = new JLabel("Number 1:");
+        JLabel label2 = new JLabel("Number 2:");
+        num1Field = new JTextField(10);
+        num2Field = new JTextField(10);
+        addBtn = new JButton("ADD");
+        subBtn = new JButton("SUBTRACT");
+        mulBtn = new JButton("MULTIPLY");
+        divBtn = new JButton("DIVIDE");
+
+        addBtn.addActionListener(this);
+        subBtn.addActionListener(this);
+        mulBtn.addActionListener(this);
+        divBtn.addActionListener(this);
+
+        // Add components (arranged to look neat)
+        add(label1);
+        add(num1Field);
+        add(label2);
+        add(num2Field);
+
+        // Add a panel for the four buttons
+        JPanel btnPanel = new JPanel(new GridLayout(1, 4, 5, 5));
+        btnPanel.add(addBtn);
+        btnPanel.add(subBtn);
+        btnPanel.add(mulBtn);
+        btnPanel.add(divBtn);
+        add(btnPanel); // this will occupy one cell in the 3x2 grid
+
+        setSize(500, 150);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Do not call setVisible here if constructing on EDT; we call it in main
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            double num1 = Double.parseDouble(num1Field.getText().trim());
+            double num2 = Double.parseDouble(num2Field.getText().trim());
+            double result = 0;
+            String operation = "";
+
+            if (e.getSource() == addBtn) {
+                result = num1 + num2;
+                operation = "Addition";
+            } else if (e.getSource() == subBtn) {
+                result = num1 - num2;
+                operation = "Subtraction";
+            } else if (e.getSource() == mulBtn) {
+                result = num1 * num2;
+                operation = "Multiplication";
+            } else if (e.getSource() == divBtn) {
+                if (num2 == 0) {
+                    JOptionPane.showMessageDialog(this, "Cannot divide by zero!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                result = num1 / num2;
+                operation = "Division";
+            }
+
+            JOptionPane.showMessageDialog(this, operation + ": " + result, "Result", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numbers!", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Ensure Swing components are created on the Event Dispatch Thread
+        SwingUtilities.invokeLater(() -> {
+            Exp_10_2 frame = new Exp_10_2();
+            frame.setVisible(true);
+        });
+    }
+}
